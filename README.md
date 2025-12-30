@@ -109,7 +109,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/terraform-sa-key.json"
 ## Terraform Folder Structure
 
 ```
-terraform-gcp-storage/
+terraform-gcpdemo/
 │
 ├── main.tf
 ├── variables.tf
@@ -134,7 +134,11 @@ variable "region" {
   type        = string
   default     = "us-central1"
 }
-
+variable "zone" {
+  description = "GCP Zone"
+  type        = string
+  default     = "us-central1-a"
+}
 variable "bucket_name" {
   description = "Name of the GCP Storage Bucket"
   type        = string
@@ -144,15 +148,27 @@ variable "bucket_name" {
 ### main.tf
 
 ```hcl
-provider "google" {
-  project = var.project_id
-  region  = var.region
+
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "7.14.1"
+    }
+  }
 }
 
-resource "google_storage_bucket" "bucket" {
-  name          = var.bucket_name
-  location      = var.region
-  force_destroy = true
+provider "google" {
+  project     = "sampleproject"
+  region      = "us-central1"
+  zone        = "us-central1-a"
+  credentials = "./keys.json"
+}
+
+resource "google_storage_bucket" "gcs" {
+  name          = "xxxxxxxxxxxxx"
+  location      = "us-central1"
+  
 }
 ```
 
